@@ -23,15 +23,21 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configuração do CORS simplificada e funcional
+// 1️⃣ Middleware CORS
 app.use(
     cors({
-        origin: ['https://inphantil-moveis.vercel.app'], // URLs do frontend
+        origin: 'https://inphantil-moveis.vercel.app', // seu frontend
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
         credentials: true,
     })
 );
+
+// 2️⃣ Middleware para responder preflight (OPTIONS) antes de autenticação
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') return res.sendStatus(200);
+    next();
+});
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
