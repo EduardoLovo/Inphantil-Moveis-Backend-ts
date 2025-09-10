@@ -26,7 +26,10 @@ const port = process.env.PORT || 3000;
 // Configuração do CORS simplificada e funcional
 app.use(
     cors({
-        origin: ['http://localhost:3001', 'http://localhost:5173'], // URLs do frontend
+        origin: [
+            'http://localhost:3001',
+            'https://inphantil-moveis.vercel.app/',
+        ], // URLs do frontend
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
         credentials: true,
