@@ -23,18 +23,30 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// 1️⃣ Middleware CORS
+// Configuração do CORS para produção e desenvolvimento
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://inphantil-moveis.vercel.app', // substitua pelo seu domínio Vercel
+];
+
 app.use(
     cors({
-        origin: 'https://inphantil-moveis.vercel.app', // seu frontend
-        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+        origin: function (origin, callback) {
+            // Permite requests sem origin (como mobile apps ou curl requests)
+            if (!origin) return callback(null, true);
+
+            if (allowedOrigins.indexOf(origin) === -1) {
+                const msg =
+                    'The CORS policy for this site does not allow access from the specified Origin.';
+                return callback(new Error(msg), false);
+            }
+            return callback(null, true);
+        },
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
     })
 );
-
-// 2️⃣ Responde preflight OPTIONS para todas as rotas
-app.options('*', cors());
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
