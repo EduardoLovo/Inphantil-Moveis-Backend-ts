@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model apliques {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  v          Int      @default(0) @map("__v")
+  codigo     String   @unique(map: "codigo_1")
+  createdAt  DateTime @default(now())
+  estoque    Boolean
+  imagem     String
+  ordem      Int
+  quantidade Int
+  updatedAt  DateTime @updatedAt
+}
+
+model lencolprontaentregas {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  v          Int      @default(0) @map("__v")
+  codigo     String
+  cor        String
+  createdAt  DateTime @default(now())
+  imagem     String
+  quantidade Int
+  tamanho    String
+  updatedAt  DateTime @updatedAt
+}
+
+model pantones {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int      @default(0) @map("__v")
+  codigo    String   @unique(map: "codigo_1")
+  cor       String
+  createdAt DateTime @default(now())
+  estoque   Boolean
+  imagem    String
+  updatedAt DateTime @updatedAt
+}
+
+model sinteticos {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int      @default(0) @map("__v")
+  codigo    String   @unique(map: "codigo_1")
+  cor       String
+  createdAt DateTime @default(now())
+  estoque   Boolean
+  imagem    String
+  updatedAt DateTime @updatedAt
+}
+
+model tecidoparalencols {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  v          Int      @default(0) @map("__v")
+  cor        String
+  createdAt  DateTime @default(now())
+  estoque    Boolean
+  imagem     String
+  quantidade Int
+  updatedAt  DateTime @updatedAt
+}
+
+model usuarios {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  v       Int   @default(0) @map("__v")
+  senha   String
+  tipo    String
+  usuario String @unique(map: "usuario_1")
+}
