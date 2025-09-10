@@ -25,7 +25,7 @@ const port = process.env.PORT || 3000;
 
 // Configuração do CORS para produção e desenvolvimento
 const allowedOrigins = [
-    'http://localhost:5173',
+    'http://localhost:3001',
     'https://inphantil-moveis.vercel.app', // substitua pelo seu domínio Vercel
 ];
 
