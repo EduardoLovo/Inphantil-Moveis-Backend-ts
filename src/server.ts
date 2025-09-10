@@ -23,42 +23,15 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configuração dinâmica do CORS para desenvolvimento e produção
-const corsOptions = {
-    origin: function (
-        origin: string | undefined,
-        callback: (err: Error | null, allow?: boolean) => void
-    ) {
-        // Lista de origens permitidas
-        const allowedOrigins = [
-            'http://localhost:3001',
-            'http://localhost:5173',
-            'https://inphantil-moveis.vercel.app',
-            'https://inphantil-moveis-git-main-eduardolovos-projects.vercel.app', // possíveis URLs do Vercel
-            'https://inphantil-moveis-eduardolovos-projects.vercel.app',
-        ];
-
-        // Permite requests sem origin (como mobile apps, curl, etc)
-        if (!origin) return callback(null, true);
-
-        // Verifica se a origem está na lista de permitidas
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.log('Origin bloqueada pelo CORS:', origin);
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'x-vercel-id'],
-    credentials: true,
-    optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options('*', cors(corsOptions));
+// Configuração do CORS simplificada e funcional
+app.use(
+    cors({
+        origin: ['https://inphantil-moveis.vercel.app'], // URLs do frontend
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+        credentials: true,
+    })
+);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
