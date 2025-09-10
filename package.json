@@ -5,8 +5,11 @@
     "main": "index.js",
     "scripts": {
         "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
-        "build": "tsc",
-        "start": "node dist/server.js"
+        "build": "npm run build:prisma && tsc",
+        "build:vercel": "npm run build:prisma && tsc",
+        "build:prisma": "prisma generate",
+        "start": "node dist/server.js",
+        "vercel-build": "npm run build:prisma && npm run build"
     },
     "keywords": [],
     "author": "",
