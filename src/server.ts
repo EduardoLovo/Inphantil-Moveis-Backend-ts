@@ -28,7 +28,7 @@ app.use(
     cors({
         origin: [
             'http://localhost:3001',
-            'https://inphantil-moveis.vercel.app/',
+            'https://inphantil-moveis.vercel.app',
         ], // URLs do frontend
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
