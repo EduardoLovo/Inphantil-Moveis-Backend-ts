@@ -23,28 +23,12 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configuração do CORS para produção e desenvolvimento
-const allowedOrigins = [
-    'http://localhost:5173',
-    'https://seusite.vercel.app', // substitua pelo seu domínio Vercel
-    process.env.FRONTEND_URL, // variável de ambiente para o frontend
-];
-
+// Configuração do CORS simplificada e funcional
 app.use(
     cors({
-        origin: function (origin, callback) {
-            // Permite requests sem origin (como mobile apps ou curl requests)
-            if (!origin) return callback(null, true);
-
-            if (allowedOrigins.indexOf(origin) === -1) {
-                const msg =
-                    'The CORS policy for this site does not allow access from the specified Origin.';
-                return callback(new Error(msg), false);
-            }
-            return callback(null, true);
-        },
-        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
+        origin: ['http://localhost:3001', 'http://localhost:5173'], // URLs do frontend
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
         credentials: true,
     })
 );
