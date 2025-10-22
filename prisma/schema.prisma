@@ -51,6 +51,7 @@ model sinteticos {
   estoque   Boolean
   imagem    String
   updatedAt DateTime @updatedAt
+  tapete    Boolean  @default(false) 
 }
 
 model tecidoparalencols {
