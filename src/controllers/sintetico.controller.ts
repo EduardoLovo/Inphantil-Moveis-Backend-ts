@@ -9,6 +9,7 @@ interface CreateSinteticoBody {
     imagem: string;
     estoque: boolean;
     cor: string;
+    tapete: boolean;
 }
 
 /** Tipagem do corpo esperado no update (todos opcionais) */
@@ -17,6 +18,7 @@ interface UpdateSinteticoBody {
     imagem?: string;
     estoque?: boolean;
     cor?: string;
+    tapete?: boolean;
 }
 
 function isNonEmptyString(v: unknown): v is string {
@@ -71,10 +73,16 @@ export const createSintetico = async (
     req: Request<{}, {}, CreateSinteticoBody>,
     res: Response
 ) => {
-    const { codigo, imagem, estoque, cor } = req.body;
+    const { codigo, imagem, estoque, cor, tapete } = req.body;
 
     // Validação simples
-    if (!codigo || !imagem || estoque === undefined || !cor) {
+    if (
+        !codigo ||
+        !imagem ||
+        estoque === undefined ||
+        tapete === undefined ||
+        !cor
+    ) {
         return res.status(400).json({ message: 'Preencha todos os campos' });
     }
 
@@ -90,7 +98,7 @@ export const createSintetico = async (
         // Converter estoque
 
         const novo = await prisma.sinteticos.create({
-            data: { codigo, imagem, estoque, cor },
+            data: { codigo, imagem, estoque, cor, tapete },
         });
 
         return res.status(201).json({
@@ -113,7 +121,7 @@ export const updateSintetico = async (
     res: Response
 ) => {
     const { id } = req.params;
-    const { codigo, imagem, estoque, cor } = req.body;
+    const { codigo, imagem, estoque, cor, tapete } = req.body;
 
     try {
         const atual = await prisma.sinteticos.findUnique({ where: { id } });
@@ -146,6 +154,11 @@ export const updateSintetico = async (
         // Atualizar estoque
         if (typeof estoque === 'boolean' && estoque !== atual.estoque) {
             updates.estoque = estoque;
+        }
+
+        // Atualizar tapete
+        if (typeof tapete === 'boolean' && tapete !== atual.tapete) {
+            updates.tapete = tapete;
         }
 
         // Atualizar cor
