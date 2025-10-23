@@ -52,6 +52,7 @@ model sinteticos {
   imagem    String
   updatedAt DateTime @updatedAt
   tapete    Boolean  @default(false) 
+  externo   Boolean  @default(false) 
 }
 
 model tecidoparalencols {

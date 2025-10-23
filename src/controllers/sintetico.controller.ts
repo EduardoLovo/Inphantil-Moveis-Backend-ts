@@ -10,6 +10,7 @@ interface CreateSinteticoBody {
     estoque: boolean;
     cor: string;
     tapete: boolean;
+    externo: boolean;
 }
 
 /** Tipagem do corpo esperado no update (todos opcionais) */
@@ -19,6 +20,7 @@ interface UpdateSinteticoBody {
     estoque?: boolean;
     cor?: string;
     tapete?: boolean;
+    externo?: boolean;
 }
 
 function isNonEmptyString(v: unknown): v is string {
@@ -73,7 +75,7 @@ export const createSintetico = async (
     req: Request<{}, {}, CreateSinteticoBody>,
     res: Response
 ) => {
-    const { codigo, imagem, estoque, cor, tapete } = req.body;
+    const { codigo, imagem, estoque, cor, tapete, externo } = req.body;
 
     // Validação simples
     if (
@@ -81,7 +83,8 @@ export const createSintetico = async (
         !imagem ||
         estoque === undefined ||
         tapete === undefined ||
-        !cor
+        !cor ||
+        externo === undefined
     ) {
         return res.status(400).json({ message: 'Preencha todos os campos' });
     }
@@ -98,7 +101,7 @@ export const createSintetico = async (
         // Converter estoque
 
         const novo = await prisma.sinteticos.create({
-            data: { codigo, imagem, estoque, cor, tapete },
+            data: { codigo, imagem, estoque, cor, tapete, externo },
         });
 
         return res.status(201).json({
@@ -121,7 +124,7 @@ export const updateSintetico = async (
     res: Response
 ) => {
     const { id } = req.params;
-    const { codigo, imagem, estoque, cor, tapete } = req.body;
+    const { codigo, imagem, estoque, cor, tapete, externo } = req.body;
 
     try {
         const atual = await prisma.sinteticos.findUnique({ where: { id } });
@@ -159,6 +162,10 @@ export const updateSintetico = async (
         // Atualizar tapete
         if (typeof tapete === 'boolean' && tapete !== atual.tapete) {
             updates.tapete = tapete;
+        }
+
+        if (typeof externo === 'boolean' && externo !== atual.externo) {
+            updates.externo = externo;
         }
 
         // Atualizar cor
